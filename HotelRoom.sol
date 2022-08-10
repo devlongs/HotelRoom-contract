@@ -11,11 +11,19 @@ contract HotelRoom {
         currentStatus = Statuses.Vacant;
     }
 
-    function book() payable {
-        // check price
-          require(msg.value == 2 ether, "Not enough ether provided.");
-        // check status so you dont book twice
-        require(currentStatus == Statuses.Vacant, "Currently occupied.");
+    modifier onlyWhileVacant {
+          require(currentStatus == Statuses.Vacant, "Currently occupied.");
+
+          _;
+    }
+
+     modifier costs(uint _amount) {
+          require(msg.value >= _amount, "Not enough ther provided.");
+
+          _;
+    }
+
+    function book() payable  onlyWhileVacant  costs(2 ether){
         currentStatus Statuses.Occupied;
         owner.transfer(msg.value);
     }
