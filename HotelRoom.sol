@@ -5,6 +5,8 @@ contract HotelRoom {
     enum Statuses { Vacant, Occupied};
     Statuses currentStatus;
 
+    event Occupy(address _occupant, uint _value);
+
     address payable public owner;
     constructor() {
         owner = msg.sender;
@@ -26,5 +28,7 @@ contract HotelRoom {
     function book() payable  onlyWhileVacant  costs(2 ether){
         currentStatus Statuses.Occupied;
         owner.transfer(msg.value);
+
+        emit Occupy(msg.sender, msg.value);
     }
 }
